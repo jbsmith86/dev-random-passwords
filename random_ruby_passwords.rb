@@ -14,10 +14,10 @@ def getPassword(numchar, special=true, exclude=[])
   end
   numchar.times do
     rand_num = getRandByte
-    while rand_num > charset.length
+    while rand_num >= charset.length
       rand_num -= charset.length
     end
-    newpassword += charset[rand_num - 1]
+    newpassword += charset[rand_num]
   end
   return newpassword
 end

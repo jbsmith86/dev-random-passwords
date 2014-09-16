@@ -13,7 +13,7 @@ def getPassword(numchar, special=True, exclude=[]):
     charset.replace(letter,"")
   for i in range(numchar):
     rand_num = getRandByte()
-    while (rand_num > len(charset)):
+    while (rand_num >= len(charset)):
       rand_num -= len(charset)
-    newpassword += charset[rand_num - 1]
+    newpassword += charset[rand_num]
   return newpassword
