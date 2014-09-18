@@ -1,3 +1,4 @@
+[![Gem Version](https://badge.fury.io/rb/dev-random-passwords.svg)](http://badge.fury.io/rb/dev-random-passwords)
 # Dev-Random-Passwords
 
 Passwords that need to be used long term and are randomly generated need more randomness than your standard random library. On Linux, Unix or OSX /dev/random can be used to create really secure passwords from random bytes. This gem provides an implementation to do just that.
