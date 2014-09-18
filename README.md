@@ -30,7 +30,7 @@ Set up a new instance
 rpg = DevRandomPasswords::Generator.new
 ```
 
-Set some options for for password
+Set some options for your password
 ```ruby
 rpg.set_options({'lowercase' => true, 'uppercase' => true, 'digits' => true,  'length' => 12, 'requirements' => {'digits' => true, 'uppercase' => true, 'lowercase' => true}})
 ```
