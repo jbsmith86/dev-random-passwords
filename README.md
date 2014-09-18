@@ -1,6 +1,6 @@
 # Dev-Random-Passwords
 
-TODO: Write a gem description
+On Linux, Unix or OSX /dev/random can be used to create really secure passwords from random bytes. This gem provides an implementation to do just that.
 
 ## Installation
 

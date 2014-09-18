@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Joel Smith"]
   spec.email         = ["joel@trosic.com"]
   spec.summary       = %q{Passwords that need to be used long term and are randomly generated need more randomness than your standard random library}
-  spec.description   = %q{On Linux, Unix or OSX /dev/random can be used to create really secure passwords from random bytes. This gem provides implementations for Python and Ruby to do just that.}
+  spec.description   = %q{On Linux, Unix or OSX /dev/random can be used to create really secure passwords from random bytes. This gem provides an implementation to do just that.}
   spec.homepage      = ""
   spec.license       = "BSD-3-Clause-Clear"
 
