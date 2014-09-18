@@ -1,6 +1,6 @@
 # Dev-Random-Passwords
 
-On Linux, Unix or OSX /dev/random can be used to create really secure passwords from random bytes. This gem provides an implementation to do just that.
+Passwords that need to be used long term and are randomly generated need more randomness than your standard random library. On Linux, Unix or OSX /dev/random can be used to create really secure passwords from random bytes. This gem provides an implementation to do just that.
 
 ## Installation
 
@@ -19,8 +19,29 @@ Or install it yourself as:
     $ gem install dev-random-passwords
 
 ## Usage
+Require the gem
 
-TODO: Write usage instructions here
+```ruby
+require 'dev-random-passwords'
+```
+
+Set up a new instance
+```ruby
+rpg = DevRandomPasswords::Generator.new
+```
+
+Set some options for for password
+```ruby
+rpg.set_options({'lowercase' => true, 'uppercase' => true, 'digits' => true,  'length' => 12, 'requirements' => {'digits' => true, 'uppercase' => true, 'lowercase' => true}})
+```
+
+Generate a new password
+```ruby
+rpg.generate
+=> "J0jhBM9dAPwk"
+```
+
+Enjoy!
 
 ## Contributing
 
