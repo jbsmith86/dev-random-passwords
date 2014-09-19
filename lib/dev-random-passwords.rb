@@ -96,27 +96,29 @@ module DevRandomPasswords
 
     def requirements_met?(password)
 
-      if @requirements['uppercase']
-        if (password.split("") & UPPERCASE_CHARS.split("")).empty?
-          return false
+      if @requirements
+        if @requirements['uppercase']
+          if (password.split("") & UPPERCASE_CHARS.split("")).empty?
+            return false
+          end
         end
-      end
 
-      if @requirements['lowercase']
-        if (password.split("") & LOWERCASE_CHARS.split("")).empty?
-          return false
+        if @requirements['lowercase']
+          if (password.split("") & LOWERCASE_CHARS.split("")).empty?
+            return false
+          end
         end
-      end
 
-      if @requirements['digits']
-        if (password.split("") & DIGITS.split("")).empty?
-          return false
+        if @requirements['digits']
+          if (password.split("") & DIGITS.split("")).empty?
+            return false
+          end
         end
-      end
 
-      if @requirements['special']
-        if (password.split("") & SPECIAL_CHARS.split("")).empty?
-          return false
+        if @requirements['special']
+          if (password.split("") & SPECIAL_CHARS.split("")).empty?
+            return false
+          end
         end
       end
 
