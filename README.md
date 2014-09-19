@@ -37,8 +37,7 @@ rpg.set_options({'lowercase' => true, 'uppercase' => true, 'digits' => true,  'l
 
 Generate a new password
 ```ruby
-rpg.generate
-=> "J0jhBM9dAPwk"
+rpg.generate #=> "J0jhBM9dAPwk"
 ```
 
 Enjoy!
