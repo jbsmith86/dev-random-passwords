@@ -46,7 +46,7 @@ $ randompasswords -c digits -l 54 -e 23456789
 010000101100100111000010000111101010011101110010011011
 ```
 
-Run "randompasswords -h" for full set of option and description
+Run "randompasswords -h" for full set of options and description
 
 ### For programming
 Require the gem
