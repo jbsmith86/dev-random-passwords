@@ -51,14 +51,14 @@ module DevRandomPasswords
       if options['include']
         if options['include'].respond_to? :each
           options['include'].each do |char|
-            unless new_set.includes? char
-              new_set += char
+            unless new_set.include? char
+              new_set.insert(-1, char)
             end
           end
         elsif options['include'].respond_to? :split
           options['include'].split("").each do |char|
-            unless new_set.includes? char
-              new_set += char
+            unless new_set.include? char
+              new_set.insert(-1, char)
             end
           end
         end
@@ -67,14 +67,14 @@ module DevRandomPasswords
       if options['exclude']
         if options['exclude'].respond_to? :each
           options['exclude'].each do |char|
-            if new_set.includes? char
-              new_set -= char
+            if new_set.include? char
+              new_set = new_set.tr(char, '')
             end
           end
         elsif options['exclude'].respond_to? :split
           options['exclude'].split("").each do |char|
-            if new_set.includes? char
-              new_set -= char
+            if new_set.include? char
+              new_set = new_set.tr(char, '')
             end
           end
         end
