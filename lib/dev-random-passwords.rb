@@ -25,7 +25,6 @@ module DevRandomPasswords
         else
           raise "/dev/hwrng is not readable by the current user please change permissions on this file"
         end
-      end
 
       elsif File.exist?('/dev/random')
         if File.readable?('/dev/random')
