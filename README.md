@@ -20,6 +20,35 @@ Or install it yourself as:
     $ gem install dev-random-passwords
 
 ## Usage
+
+### From command line
+
+Simply install the gem and run "randompasswords"
+```
+$ randompasswords
+dV>28l,T
+```
+
+Use -l to specify chracter length
+```
+$ randompasswords -l 16
+U[3wjY?]~h$26s!Q
+```
+Use -c to set which character types you want to use (uppercase, lowercase, digits or special)
+```
+$ randompasswords -l 16 -c lowercase,uppercase
+cxtDCjIaTFmHnlba
+```
+
+Use -i to include certain characters or -e to exclude them
+```
+$ randompasswords -c digits -l 54 -e 23456789
+010000101100100111000010000111101010011101110010011011
+```
+
+Run "randompasswords -h" for full set of options and description
+
+### For programming
 Require the gem
 
 ```ruby
