@@ -16,8 +16,30 @@ module DevRandomPasswords
     end
 
     def get_byte
-      dev_random = File.new("/dev/random", 'r')
-      dev_random.read(1).ord
+      if File.exist?('/dev/hwrng')
+        if File.readable?('/dev/hwrng')
+          random_file = File.new('/dev/hwrng', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          return random_byte
+        else
+          raise "/dev/hwrng is not readable by the current user please change permissions on this file"
+        end
+      end
+
+      elsif File.exist?('/dev/random')
+        if File.readable?('/dev/random')
+          random_file = File.new('/dev/random', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          return random_byte
+        else
+          raise "/dev/random is not readable by the current user please change permissions on this file"
+        end
+
+      else
+        raise "Could not find a random number generator on your system"
+      end
     end
 
     def set_options(options={
