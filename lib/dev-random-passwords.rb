@@ -13,27 +13,62 @@ module DevRandomPasswords
       @charset = LOWERCASE_CHARS + UPPERCASE_CHARS + DIGITS + SPECIAL_CHARS
       @char_length = 8
       @requirements = nil
+      @hardware_random = false
     end
 
     def get_byte
-      if File.exist?('/dev/hwrng')
-        if File.readable?('/dev/hwrng')
-          random_file = File.new('/dev/hwrng', 'r')
-          random_byte = random_file.read(1).ord
-          random_file.close
-          return random_byte
-        else
-          raise "/dev/hwrng is not readable by the current user please change permissions on this file"
+      if @hardware_random == true
+
+        if File.exist?('/dev/hwrng')
+          if File.readable?('/dev/hwrng')
+            random_file = File.new('/dev/hwrng', 'r')
+            random_byte = random_file.read(1).ord
+            random_file.close
+            if random_byte
+              return random_byte
+            end
+          else
+            raise "/dev/hwrng is not readable by the current user please change permissions on this file"
+          end
         end
 
-      elsif File.exist?('/dev/random')
+        if File.exist?('/dev/hwrandom')
+          if File.readable?('/dev/hwrandom')
+            random_file = File.new('/dev/hwrandom', 'r')
+            random_byte = random_file.read(1).ord
+            random_file.close
+            if random_byte
+              return random_byte
+            end
+          else
+            raise "/dev/hwrandom is not readable by the current user please change permissions on this file"
+          end
+        end
+
+      end
+
+      if File.exist?('/dev/random')
         if File.readable?('/dev/random')
           random_file = File.new('/dev/random', 'r')
           random_byte = random_file.read(1).ord
           random_file.close
-          return random_byte
+          if random_byte
+            return random_byte
+          end
         else
           raise "/dev/random is not readable by the current user please change permissions on this file"
+        end
+
+      elsif File.exist?('/dev/urandom')
+        if File.readable?('/dev/urandom')
+          random_file = File.new('/dev/urandom', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          if random_byte
+            return random_byte
+          end
+        else
+          raise "/dev/urandom is not readable by the current user please change permissions on this file"
         end
 
       else
