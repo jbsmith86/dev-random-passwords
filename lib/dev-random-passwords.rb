@@ -8,72 +8,14 @@ module DevRandomPasswords
     UPPERCASE_CHARS = ('A'..'Z').to_a.join("")
     DIGITS = ('0'..'9').to_a.join("")
     SPECIAL_CHARS = '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+    NOT_READABLE_ERROR = "is not readable by the current user please change permissions on this file or switch users."
+    REQUIREMENT_CONFLICT_ERROR = "You required a character type that is not possible with your current password options. Set your options and try again."
 
     def initialize
       @charset = LOWERCASE_CHARS + UPPERCASE_CHARS + DIGITS + SPECIAL_CHARS
       @char_length = 8
       @requirements = nil
       @hardware_random = false
-    end
-
-    def get_byte
-      if @hardware_random == true
-
-        if File.exist?('/dev/hwrng')
-          if File.readable?('/dev/hwrng')
-            random_file = File.new('/dev/hwrng', 'r')
-            random_byte = random_file.read(1).ord
-            random_file.close
-            if random_byte
-              return random_byte
-            end
-          else
-            raise "/dev/hwrng is not readable by the current user please change permissions on this file"
-          end
-        end
-
-        if File.exist?('/dev/hwrandom')
-          if File.readable?('/dev/hwrandom')
-            random_file = File.new('/dev/hwrandom', 'r')
-            random_byte = random_file.read(1).ord
-            random_file.close
-            if random_byte
-              return random_byte
-            end
-          else
-            raise "/dev/hwrandom is not readable by the current user please change permissions on this file"
-          end
-        end
-
-      end
-
-      if File.exist?('/dev/random')
-        if File.readable?('/dev/random')
-          random_file = File.new('/dev/random', 'r')
-          random_byte = random_file.read(1).ord
-          random_file.close
-          if random_byte
-            return random_byte
-          end
-        else
-          raise "/dev/random is not readable by the current user please change permissions on this file"
-        end
-
-      elsif File.exist?('/dev/urandom')
-        if File.readable?('/dev/urandom')
-          random_file = File.new('/dev/urandom', 'r')
-          random_byte = random_file.read(1).ord
-          random_file.close
-          if random_byte
-            return random_byte
-          end
-        else
-          raise "/dev/urandom is not readable by the current user please change permissions on this file"
-        end
-
-      else
-        raise "Could not find a random number generator on your system"
-      end
     end
 
     def set_options(options={
@@ -150,6 +92,89 @@ module DevRandomPasswords
 
     end
 
+    def generate
+      new_password = ""
+
+      @char_length.times do
+        rand_num = get_byte
+        while rand_num >= @charset.length
+          rand_num -= @charset.length
+        end
+        new_password += @charset[rand_num]
+      end
+
+      check_for_conflicts
+
+      if requirements_met? new_password
+        return new_password
+      else
+        return generate
+      end
+
+    end
+
+  private
+
+    def get_byte
+      if @hardware_random == true
+
+        if File.exist?('/dev/hwrng')
+          if File.readable?('/dev/hwrng')
+            random_file = File.new('/dev/hwrng', 'r')
+            random_byte = random_file.read(1).ord
+            random_file.close
+            if random_byte
+              return random_byte
+            end
+          else
+            raise "/dev/hwrng #{NOT_READABLE_ERROR}"
+          end
+        end
+
+        if File.exist?('/dev/hwrandom')
+          if File.readable?('/dev/hwrandom')
+            random_file = File.new('/dev/hwrandom', 'r')
+            random_byte = random_file.read(1).ord
+            random_file.close
+            if random_byte
+              return random_byte
+            end
+          else
+            raise "/dev/hwrandom #{NOT_READABLE_ERROR}"
+          end
+        end
+
+      end
+
+      if File.exist?('/dev/random')
+        if File.readable?('/dev/random')
+          random_file = File.new('/dev/random', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          if random_byte
+            return random_byte
+          end
+        else
+          raise "/dev/random #{NOT_READABLE_ERROR}"
+        end
+
+      elsif File.exist?('/dev/urandom')
+        if File.readable?('/dev/urandom')
+          random_file = File.new('/dev/urandom', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          if random_byte
+            return random_byte
+          end
+        else
+          raise "/dev/urandom #{NOT_READABLE_ERROR}"
+        end
+
+      else
+        raise "Could not find a random number generator on your system"
+      end
+    end
+
     def requirements_met?(password)
 
       if @requirements
@@ -182,21 +207,32 @@ module DevRandomPasswords
 
     end
 
-    def generate
-      new_password = ""
+    def check_for_conflicts
 
-      @char_length.times do
-        rand_num = get_byte
-        while rand_num >= @charset.length
-          rand_num -= @charset.length
+      if @requirements
+        if @requirements['uppercase']
+          if (@charset.split("") & UPPERCASE_CHARS.split("")).empty?
+            raise REQUIREMENT_CONFLICT_ERROR
+          end
         end
-        new_password += @charset[rand_num]
-      end
 
-      if requirements_met? new_password
-        return new_password
-      else
-        return generate
+        if @requirements['lowercase']
+          if (@charset.split("") & LOWERCASE_CHARS.split("")).empty?
+            raise REQUIREMENT_CONFLICT_ERROR
+          end
+        end
+
+        if @requirements['digits']
+          if (@charset.split("") & DIGITS.split("")).empty?
+            raise REQUIREMENT_CONFLICT_ERROR
+          end
+        end
+
+        if @requirements['special']
+          if (@charset.split("") & SPECIAL_CHARS.split("")).empty?
+            raise REQUIREMENT_CONFLICT_ERROR
+          end
+        end
       end
 
     end
