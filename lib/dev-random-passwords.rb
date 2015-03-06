@@ -46,6 +46,21 @@ module DevRandomPasswords
         new_set += SPECIAL_CHARS
       end
 
+      if new_set.empty?
+        unless options['lowercase'] == false
+          new_set = new_set + LOWERCASE_CHARS
+        end
+        unless options['uppercase'] == false
+          new_set = new_set + UPPERCASE_CHARS
+        end
+        unless options['digits'] == false
+          new_set = new_set + DIGITS
+        end
+        unless options['special'] == false
+          new_set = new_set + SPECIAL_CHARS
+        end
+      end
+
       if options['include']
         if options['include'].respond_to? :each
           options['include'].each do |char|
@@ -79,18 +94,7 @@ module DevRandomPasswords
       end
 
       if new_set.empty?
-        unless options['lowercase'] == false
-          new_set = new_set + LOWERCASE_CHARS
-        end
-        unless options['uppercase'] == false
-          new_set = new_set + UPPERCASE_CHARS
-        end
-        unless options['digits'] == false
-          new_set = new_set + DIGITS
-        end
-        unless options['special'] == false
-          new_set = new_set + SPECIAL_CHARS
-        end
+        raise BAD_CHARACTER_SET_ERROR
       end
 
       @charset = new_set
