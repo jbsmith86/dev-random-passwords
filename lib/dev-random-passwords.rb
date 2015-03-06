@@ -78,6 +78,10 @@ module DevRandomPasswords
         end
       end
 
+      if new_set.empty?
+        new_set = LOWERCASE_CHARS + UPPERCASE_CHARS + DIGITS + SPECIAL_CHARS
+      end
+
       @charset = new_set
 
       if options['length']
