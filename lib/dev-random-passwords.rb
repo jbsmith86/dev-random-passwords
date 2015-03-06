@@ -109,6 +109,8 @@ module DevRandomPasswords
         @requirements = options['requirements']
       end
 
+      nil
+
     end
 
     def generate
