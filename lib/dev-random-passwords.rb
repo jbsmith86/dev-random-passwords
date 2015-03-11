@@ -169,15 +169,18 @@ module DevRandomPasswords
 
       if File.exist?('/dev/random')
         if File.readable?('/dev/random')
-          random_file = File.new('/dev/random', 'r')
-          random_byte = random_file.read(1).ord
-          random_file.close
-          if random_byte
-            return random_byte
+          if `cat /proc/sys/kernel/random/entropy_avail`.chomp.to_i > 64
+            random_file = File.new('/dev/random', 'r')
+            random_byte = random_file.read(1).ord
+            random_file.close
+            if random_byte
+              return random_byte
+            end
           end
         else
           raise "/dev/random #{NOT_READABLE_ERROR}"
         end
+      end
 
       elsif File.exist?('/dev/urandom')
         if File.readable?('/dev/urandom')
