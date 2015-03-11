@@ -138,51 +138,27 @@ module DevRandomPasswords
 
     def get_byte
       if @hardware_random == true
-
-        if File.exist?('/dev/hwrng')
-          if File.readable?('/dev/hwrng')
-            random_file = File.new('/dev/hwrng', 'r')
-            random_byte = random_file.read(1).ord
-            random_file.close
-            if random_byte
-              return random_byte
-            end
-          else
-            raise "/dev/hwrng #{NOT_READABLE_ERROR}"
-          end
-        end
-
-        if File.exist?('/dev/hwrandom')
-          if File.readable?('/dev/hwrandom')
-            random_file = File.new('/dev/hwrandom', 'r')
-            random_byte = random_file.read(1).ord
-            random_file.close
-            if random_byte
-              return random_byte
-            end
-          else
-            raise "/dev/hwrandom #{NOT_READABLE_ERROR}"
-          end
-        end
-
-      end
-
-      if File.exist?('/dev/random')
-        if File.readable?('/dev/random')
-          if `cat /proc/sys/kernel/random/entropy_avail`.chomp.to_i > 64
-            random_file = File.new('/dev/random', 'r')
-            random_byte = random_file.read(1).ord
-            random_file.close
-            if random_byte
-              return random_byte
-            end
-          end
-        else
-          raise "/dev/random #{NOT_READABLE_ERROR}"
+        hw_byte = read_byte_from_hw
+        if hw_byte
+          return hw_byte
         end
       end
 
-      elsif File.exist?('/dev/urandom')
+      random_byte = read_byte_from_dev_random
+      if random_byte
+        return random_byte
+      end
+
+      random_byte = read_byte_from_dev_urandom
+      if random_byte
+        return random_byte
+      else
+        raise "Could not find a random number generator on your system"
+      end
+    end
+
+    def read_byte_from_dev_urandom
+      if File.exist?('/dev/urandom')
         if File.readable?('/dev/urandom')
           random_file = File.new('/dev/urandom', 'r')
           random_byte = random_file.read(1).ord
@@ -193,9 +169,55 @@ module DevRandomPasswords
         else
           raise "/dev/urandom #{NOT_READABLE_ERROR}"
         end
+      end
+    end
 
-      else
-        raise "Could not find a random number generator on your system"
+    def read_byte_from_dev_random
+      if File.exist?('/proc/sys/kernel/random/entropy_avail')
+        if `cat /proc/sys/kernel/random/entropy_avail`.chomp.to_i < 64
+          return read_byte_from_dev_urandom
+        end
+      end
+      if File.exist?('/dev/random')
+        if File.readable?('/dev/random')
+          random_file = File.new('/dev/random', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          if random_byte
+            return random_byte
+          end
+        end
+        else
+          raise "/dev/random #{NOT_READABLE_ERROR}"
+        end
+      end
+    end
+
+    def read_byte_from_hw
+      if File.exist?('/dev/hwrng')
+        if File.readable?('/dev/hwrng')
+          random_file = File.new('/dev/hwrng', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          if random_byte
+            return random_byte
+          end
+        else
+          raise "/dev/hwrng #{NOT_READABLE_ERROR}"
+        end
+      end
+
+      if File.exist?('/dev/hwrandom')
+        if File.readable?('/dev/hwrandom')
+          random_file = File.new('/dev/hwrandom', 'r')
+          random_byte = random_file.read(1).ord
+          random_file.close
+          if random_byte
+            return random_byte
+          end
+        else
+          raise "/dev/hwrandom #{NOT_READABLE_ERROR}"
+        end
       end
     end
 
