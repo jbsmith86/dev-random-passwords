@@ -26,8 +26,10 @@ Or install it yourself as:
 Simply install the gem and run "randompasswords"
 ```
 $ randompasswords
-dV>28l,T
+ci+IUid(QVG1
 ```
+
+dev-random-passwords by default creates a 12 character random password with uppercase and lowercase letters, numbers, and special characters. A password with these qualities would take centuries to brute force and ensure that you have very secure random passwords.
 
 Use -l to specify chracter length
 ```
@@ -62,12 +64,12 @@ rpg = DevRandomPasswords::Generator.new
 
 Set some options for your password
 ```ruby
-rpg.set_options({'lowercase' => true, 'uppercase' => true, 'digits' => true,  'length' => 12, 'requirements' => {'digits' => true, 'uppercase' => true, 'lowercase' => true}})
+rpg.set_options({'lowercase' => true, 'uppercase' => true, 'digits' => true,  'length' => 18, 'requirements' => {'digits' => true, 'uppercase' => true, 'lowercase' => true}})
 ```
 
 Generate a new password
 ```ruby
-rpg.generate #=> "J0jhBM9dAPwk"
+rpg.generate #=> "wdHHzTex47NWFyseN8"
 ```
 
 Enjoy!

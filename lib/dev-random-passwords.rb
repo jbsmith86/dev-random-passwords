@@ -13,7 +13,7 @@ module DevRandomPasswords
 
     def initialize
       @charset = LOWERCASE_CHARS + UPPERCASE_CHARS + DIGITS + SPECIAL_CHARS
-      @char_length = 8
+      @char_length = 12
       @requirements = nil
       @hardware_random = false
     end
@@ -25,7 +25,7 @@ module DevRandomPasswords
       'special' => true,
       'include' => nil,
       'exclude' => nil,
-      'length' => 8,
+      'length' => 12,
       'requirements' => nil})
 
       new_set = ""
