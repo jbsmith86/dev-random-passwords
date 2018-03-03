@@ -186,7 +186,6 @@ module DevRandomPasswords
           if random_byte
             return random_byte
           end
-        end
         else
           raise "/dev/random #{NOT_READABLE_ERROR}"
         end
