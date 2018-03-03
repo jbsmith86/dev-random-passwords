@@ -26,7 +26,8 @@ module DevRandomPasswords
       'include' => nil,
       'exclude' => nil,
       'length' => 12,
-      'requirements' => nil})
+      'requirements' => {'digits' => true, 'uppercase' => true, 'lowercase' => true, 'special' => true}
+      })
 
       new_set = ""
 
